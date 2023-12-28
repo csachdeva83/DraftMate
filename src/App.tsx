@@ -1,4 +1,4 @@
-import { DraftHandleValue, Editor, EditorState, Modifier, RichUtils, getDefaultKeyBinding } from 'draft-js';
+import { DraftHandleValue, Editor, EditorState, RichUtils, getDefaultKeyBinding } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
 import './App.css';
@@ -12,41 +12,33 @@ const App = () => {
         if (editorRef.current) editorRef.current.focus();
     }, []);
 
+    const styleMap = {
+        RED: {
+            color: 'red',
+        },
+    };
+
     const handleKeyCommand = useCallback(
         (command: string): DraftHandleValue => {
-            if (command === 'myeditor-heading6') {
-                const contentState = editorState.getCurrentContent();
-                const selectionState = editorState.getSelection();
-
-                const newContentState = Modifier.setBlockType(
-                    contentState,
-                    selectionState,
-                    'header-six', // Change this to the desired block type (e.g., 'header-one' for a heading)
-                );
-
-                const newEditorState = EditorState.push(editorState, newContentState, 'change-block-type');
-                setEditorState(EditorState.forceSelection(newEditorState, newContentState.getSelectionAfter()));
-                return 'handled';
-            }
-
             if (command === 'myeditor-heading1') {
-                const contentState = editorState.getCurrentContent();
-                const selectionState = editorState.getSelection();
-
-                const newContentState = Modifier.setBlockType(
-                    contentState,
-                    selectionState,
-                    'header-one', // Change this to the desired block type (e.g., 'header-one' for a heading)
-                );
-
-                const newEditorState = EditorState.push(editorState, newContentState, 'change-block-type');
-                setEditorState(EditorState.forceSelection(newEditorState, newContentState.getSelectionAfter()));
+                const newEditorState = RichUtils.toggleBlockType(editorState, 'header-one');
+                setEditorState(newEditorState);
                 return 'handled';
+            } else if (command === 'myeditor-bold') {
+                const newEditorState = RichUtils.toggleInlineStyle(editorState, 'BOLD');
+                setEditorState(newEditorState);
+                return 'handled';
+            } else if (command === 'myeditor-underline') {
+                const newEditorState = RichUtils.toggleInlineStyle(editorState, 'UNDERLINE');
+                setEditorState(newEditorState);
+                return 'handled';
+            } else if (command === 'myeditor-colorRed') {
+                const newEditorState = RichUtils.toggleInlineStyle(editorState, 'RED');
+                setEditorState(newEditorState);
             }
 
             const newState = RichUtils.handleKeyCommand(editorState, command);
 
-            // newState is one of the commands mapped to DOM shortcuts
             if (newState) {
                 setEditorState(newState);
                 return 'handled';
@@ -59,23 +51,26 @@ const App = () => {
 
     const myKeyBindingFn = (event: KeyboardEvent<HTMLInputElement>): string | null => {
         if (event.key === '#' && sequence === '') {
-            // Store the '#' in the sequence state when it's the first character
             setSequence('#');
         } else if (event.key === ' ' && sequence === '#') {
-            // If space follows the '#', indicating the desired sequence
-            setSequence(''); // Reset the sequence
+            setSequence('');
             return 'myeditor-heading1';
-            // Perform actions for the sequence being detected
         } else if (event.key === '*' && sequence === '') {
-            // Store the '#' in the sequence state when it's the first character
             setSequence('*');
         } else if (event.key === ' ' && sequence === '*') {
-            // If space follows the '#', indicating the desired sequence
-            setSequence(''); // Reset the sequence
-            return 'myeditor-heading6';
-            // Perform actions for the sequence being detected
+            setSequence('');
+            return 'myeditor-bold';
+        } else if (event.key === '*' && sequence === '*') {
+            setSequence('**');
+        } else if (event.key === '*' && sequence === '**') {
+            setSequence('***');
+        } else if (event.key === ' ' && sequence === '***') {
+            setSequence('');
+            return 'myeditor-underline';
+        } else if (event.key === ' ' && sequence === '**') {
+            setSequence('');
+            return 'myeditor-colorRed';
         } else {
-            // Reset the sequence if an unexpected key is pressed in between
             setSequence('');
         }
 
@@ -93,6 +88,7 @@ const App = () => {
             </div>
             <div className="editor-container">
                 <Editor
+                    customStyleMap={styleMap}
                     editorState={editorState}
                     onChange={setEditorState}
                     handleKeyCommand={handleKeyCommand}

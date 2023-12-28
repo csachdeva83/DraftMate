@@ -1,40 +1,44 @@
 .playground-wrapper {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
 
 .navbar-container {
-  display: flex;
-  align-items: center;
-  width: 70%;
-  margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    width: 70%;
+    margin-bottom: 30px;
 }
 
 .navbar-container > h3 {
-  font-weight: 500;
-  flex-grow: 3;
-  text-align: center;
+    font-weight: 500;
+    flex-grow: 3;
+    text-align: center;
 }
 
 .navbar-container > h3 > span {
-  font-weight: 700;
+    font-weight: 700;
 }
 
 .navbar-container > button {
-  padding: 5px 15px;
-  font-weight: 400;
-  font-size: 15px;
-  cursor: pointer;
-  background-color: white;
-  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    padding: 5px 15px;
+    font-weight: 400;
+    font-size: 15px;
+    cursor: pointer;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
 
 .editor-container {
-  width: 70%;
-  height: 70%;
-  border: 2px solid blue;
+    width: 70%;
+    height: 70%;
+    border: 2px solid blue;
+}
+
+.COLOR-RED {
+    color: #faed27;
 }
