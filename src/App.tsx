@@ -17,66 +17,49 @@ const App = () => {
         RED: {
             color: 'red',
         },
+        HEADING: {
+            fontSize: '2em',
+            fontWeight: 'bold',
+            lineHeight: '1.2',
+        },
+        BOLD: {
+            fontWeight: 'bold',
+        },
+        UNDERLINE: {
+            textDecoration: 'underline',
+        },
     };
 
     const handleKeyCommand = useCallback(
         (command: string): DraftHandleValue => {
+            let removeCharacterLength = 0;
+            let set;
+            let isCustomCommand = false;
             if (command === 'myeditor-heading1') {
-                const newEditorState = RichUtils.toggleBlockType(editorState, 'header-one');
-                setEditorState(newEditorState);
-                return 'handled';
+                removeCharacterLength = 1;
+                set = OrderedSet<string>(['HEADING']);
+                isCustomCommand = true;
             } else if (command === 'myeditor-bold') {
-                const newEditorState = RichUtils.toggleInlineStyle(editorState, 'BOLD');
-                setEditorState(newEditorState);
-                return 'handled';
+                removeCharacterLength = 2;
+                set = OrderedSet<string>(['BOLD']);
+                isCustomCommand = true;
             } else if (command === 'myeditor-colorRed') {
-                // const currentContent = editorState.getCurrentContent();
-                // const currentSelection = editorState.getSelection();
+                removeCharacterLength = 2;
+                set = OrderedSet<string>(['RED']);
+                isCustomCommand = true;
+            } else if (command === 'myeditor-underline') {
+                removeCharacterLength = 3;
+                set = OrderedSet<string>(['UNDERLINE']);
+                isCustomCommand = true;
+            }
 
-                // const rawText = currentContent.getPlainText();
-                // console.log('Text from editor:', rawText);
-
-                // const set1 = OrderedSet<string>(['RED']);
-
-                // // Insert characters '😃123' with the change type 'insert-characters'
-                // const newContent = Modifier.replaceText(currentContent, currentSelection, '😃123', set1);
-                // const newEditorState = EditorState.push(editorState, newContent, 'insert-characters');
-
-                // setEditorState(newEditorState);
-                // const selection1 = editorState.getSelection();
-                // const contentState1 = editorState.getCurrentContent();
-                // const blockStartKey = selection1.getStartKey();
-                // const block = contentState1.getBlockMap().get(blockStartKey);
-
-                // console.log(block);
-
-                // const newEditorState = RichUtils.toggleBlockType(editorState, 'start-unordered-list');
-                // const contentState2 = newEditorState.getCurrentContent();
-                // const selection2 = newEditorState.getSelection();
-                // const blockSelection = selection2.merge({
-                //     anchorOffset: 2,
-                //     focusOffset: block.getLength(),
-                // });
-
-                // const newContentState = Modifier.replaceText(contentState2, blockSelection, '');
-                // setEditorState(EditorState.push(newEditorState, newContentState, 'insert-characters'));
-
+            if (isCustomCommand) {
                 const currentSelection = editorState.getSelection();
                 const contentState = editorState.getCurrentContent();
-                // const currentContent = contentState.getPlainText(); // Get the plain text content
-
-                // Get the start and end offsets for the range to replace
                 const endOffset = currentSelection.getStartOffset();
-                const startOffset = endOffset - 2; // Two characters back from the cursor
+                const startOffset = endOffset - removeCharacterLength;
 
                 if (startOffset >= 0) {
-                    // Ensure the start offset is valid
-                    // const newTextContent =
-                    //     currentContent.substring(0, startOffset) + currentContent.substring(endOffset);
-
-                    const set1 = OrderedSet<string>(['RED']);
-
-                    // Replace the substring with an empty string
                     const newContentState = Modifier.replaceText(
                         contentState,
                         currentSelection.merge({
@@ -84,22 +67,14 @@ const App = () => {
                             focusOffset: endOffset,
                         }),
                         ' ',
-                        set1,
+                        set,
                     );
 
-                    // Create a new EditorState with the updated content
                     const newEditorState = EditorState.push(editorState, newContentState, 'insert-characters');
-
-                    // Set the new EditorState
-                    // Replace 'setEditorState' with the function you use to update the editor state
                     setEditorState(newEditorState);
-                }
 
-                return 'handled';
-            } else if (command === 'myeditor-underline') {
-                const newEditorState = RichUtils.toggleInlineStyle(editorState, 'UNDERLINE');
-                setEditorState(newEditorState);
-                return 'handled';
+                    return 'handled';
+                }
             }
 
             const newState = RichUtils.handleKeyCommand(editorState, command);
@@ -139,7 +114,6 @@ const App = () => {
             setSequence('');
         }
 
-        // If it is not custom then add default key binding
         return getDefaultKeyBinding(event);
     };
 
