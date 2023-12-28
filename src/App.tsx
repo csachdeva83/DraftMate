@@ -35,6 +35,7 @@ const App = () => {
             let removeCharacterLength = 0;
             let set;
             let isCustomCommand = false;
+
             if (command === 'myeditor-heading1') {
                 removeCharacterLength = 1;
                 set = OrderedSet<string>(['HEADING']);
@@ -59,22 +60,20 @@ const App = () => {
                 const endOffset = currentSelection.getStartOffset();
                 const startOffset = endOffset - removeCharacterLength;
 
-                if (startOffset >= 0) {
-                    const newContentState = Modifier.replaceText(
-                        contentState,
-                        currentSelection.merge({
-                            anchorOffset: startOffset,
-                            focusOffset: endOffset,
-                        }),
-                        ' ',
-                        set,
-                    );
+                const newContentState = Modifier.replaceText(
+                    contentState,
+                    currentSelection.merge({
+                        anchorOffset: startOffset,
+                        focusOffset: endOffset,
+                    }),
+                    ' ',
+                    set,
+                );
 
-                    const newEditorState = EditorState.push(editorState, newContentState, 'insert-characters');
-                    setEditorState(newEditorState);
+                const newEditorState = EditorState.push(editorState, newContentState, 'insert-characters');
+                setEditorState(newEditorState);
 
-                    return 'handled';
-                }
+                return 'handled';
             }
 
             const newState = RichUtils.handleKeyCommand(editorState, command);
