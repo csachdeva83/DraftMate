@@ -66,7 +66,7 @@ const App = () => {
                         anchorOffset: startOffset,
                         focusOffset: endOffset,
                     }),
-                    ' ',
+                    '\u200B',
                     set,
                 );
 
@@ -101,14 +101,14 @@ const App = () => {
             return 'myeditor-bold';
         } else if (event.key === '*' && sequence === '*') {
             setSequence('**');
+        } else if (event.key === ' ' && sequence === '**') {
+            setSequence('');
+            return 'myeditor-colorRed';
         } else if (event.key === '*' && sequence === '**') {
             setSequence('***');
         } else if (event.key === ' ' && sequence === '***') {
             setSequence('');
             return 'myeditor-underline';
-        } else if (event.key === ' ' && sequence === '**') {
-            setSequence('');
-            return 'myeditor-colorRed';
         } else {
             setSequence('');
         }
