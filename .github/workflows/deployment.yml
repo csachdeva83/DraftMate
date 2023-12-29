@@ -19,9 +19,9 @@ jobs:
             - name: Copy folder content recursively to vps
               uses: garygrossgarten/github-action-scp@release
               with:
+                  local: build/dist
+                  remote: /var/www/portle-assignment
                   host: ${{ secrets.HOST }}
                   username: ${{ secrets.USERNAME }}
                   password: ${{ secrets.PASSWORD }}
-                  source: 'dist/'
-                  target: /"var/www/portle-assignment"
             - run: echo "🍏 This job's status is ${{ job.status }}."
