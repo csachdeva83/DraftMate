@@ -1,11 +1,30 @@
-import { DraftHandleValue, Editor, EditorState, Modifier, RichUtils, getDefaultKeyBinding } from 'draft-js';
+import {
+    DraftHandleValue,
+    Editor,
+    EditorState,
+    Modifier,
+    RichUtils,
+    convertFromRaw,
+    convertToRaw,
+    getDefaultKeyBinding,
+} from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import { OrderedSet } from 'immutable';
 import { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { useLocalStorage } from 'usehooks-ts';
 import './App.css';
 
 const App = () => {
-    const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
+    const [savedState, setSavedState] = useLocalStorage('content', '');
+    const [editorState, setEditorState] = useState(() => {
+        const parsedString = JSON.parse(savedState);
+        if (parsedString) {
+            const contentState = convertFromRaw(parsedString);
+            return EditorState.createWithContent(contentState);
+        }
+
+        return EditorState.createEmpty();
+    });
     const [sequence, setSequence] = useState<string>('');
     const editorRef = useRef<Editor>(null);
 
@@ -116,13 +135,18 @@ const App = () => {
         return getDefaultKeyBinding(event);
     };
 
+    const saveEditorState = () => {
+        const convertRaw = convertToRaw(editorState.getCurrentContent());
+        setSavedState(JSON.stringify(convertRaw));
+    };
+
     return (
         <div className="playground-wrapper">
             <div className="navbar-container">
                 <h3>
                     Demo editor by <span>Cherish Sachdeva</span>
                 </h3>
-                <button>Save</button>
+                <button onClick={saveEditorState}>Save</button>
             </div>
             <div className="editor-container">
                 <Editor
