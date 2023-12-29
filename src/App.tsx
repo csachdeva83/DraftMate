@@ -33,7 +33,7 @@ const App = () => {
     const handleKeyCommand = useCallback(
         (command: string): DraftHandleValue => {
             let removeCharacterLength = 0;
-            let set;
+            let set = OrderedSet<string>();
             let isCustomCommand = false;
 
             if (command === 'myeditor-heading1') {
