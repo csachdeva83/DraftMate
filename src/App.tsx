@@ -50,35 +50,52 @@ const App = () => {
         },
     };
 
+    const customCommandMap = new Map<
+        string,
+        {
+            removeCharacterLength: number;
+            set: OrderedSet<string>;
+        }
+    >([
+        [
+            'heading',
+            {
+                removeCharacterLength: 1,
+                set: OrderedSet<string>(['HEADING']),
+            },
+        ],
+        [
+            'bold',
+            {
+                removeCharacterLength: 2,
+                set: OrderedSet<string>(['BOLD']),
+            },
+        ],
+        [
+            'red',
+            {
+                removeCharacterLength: 2,
+                set: OrderedSet<string>(['RED']),
+            },
+        ],
+        [
+            'underline',
+            {
+                removeCharacterLength: 3,
+                set: OrderedSet<string>(['UNDERLINE']),
+            },
+        ],
+    ]);
+
     const handleKeyCommand = useCallback(
         (command: string): DraftHandleValue => {
-            let removeCharacterLength = 0;
-            let set = OrderedSet<string>();
-            let isCustomCommand = false;
+            const customCommand = customCommandMap.get(command);
 
-            if (command === 'myeditor-heading1') {
-                removeCharacterLength = 1;
-                set = OrderedSet<string>(['HEADING']);
-                isCustomCommand = true;
-            } else if (command === 'myeditor-bold') {
-                removeCharacterLength = 2;
-                set = OrderedSet<string>(['BOLD']);
-                isCustomCommand = true;
-            } else if (command === 'myeditor-colorRed') {
-                removeCharacterLength = 2;
-                set = OrderedSet<string>(['RED']);
-                isCustomCommand = true;
-            } else if (command === 'myeditor-underline') {
-                removeCharacterLength = 3;
-                set = OrderedSet<string>(['UNDERLINE']);
-                isCustomCommand = true;
-            }
-
-            if (isCustomCommand) {
+            if (customCommand) {
                 const currentSelection = editorState.getSelection();
                 const contentState = editorState.getCurrentContent();
                 const endOffset = currentSelection.getStartOffset();
-                const startOffset = endOffset - removeCharacterLength;
+                const startOffset = endOffset - customCommand.removeCharacterLength;
 
                 const newContentState = Modifier.replaceText(
                     contentState,
@@ -87,7 +104,7 @@ const App = () => {
                         focusOffset: endOffset,
                     }),
                     '\u200B',
-                    set,
+                    customCommand.set,
                 );
 
                 const newEditorState = EditorState.push(editorState, newContentState, 'insert-characters');
@@ -113,22 +130,22 @@ const App = () => {
             setSequence('#');
         } else if (event.key === ' ' && sequence === '#') {
             setSequence('');
-            return 'myeditor-heading1';
+            return 'heading';
         } else if (event.key === '*' && sequence === '') {
             setSequence('*');
         } else if (event.key === ' ' && sequence === '*') {
             setSequence('');
-            return 'myeditor-bold';
+            return 'bold';
         } else if (event.key === '*' && sequence === '*') {
             setSequence('**');
         } else if (event.key === ' ' && sequence === '**') {
             setSequence('');
-            return 'myeditor-colorRed';
+            return 'red';
         } else if (event.key === '*' && sequence === '**') {
             setSequence('***');
         } else if (event.key === ' ' && sequence === '***') {
             setSequence('');
-            return 'myeditor-underline';
+            return 'underline';
         } else {
             setSequence('');
         }
