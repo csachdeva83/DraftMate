@@ -11,6 +11,7 @@ import {
 import 'draft-js/dist/Draft.css';
 import { OrderedSet } from 'immutable';
 import { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { toast } from 'sonner';
 import { useLocalStorage } from 'usehooks-ts';
 import './App.css';
 
@@ -138,6 +139,12 @@ const App = () => {
     const saveEditorState = () => {
         const convertRaw = convertToRaw(editorState.getCurrentContent());
         setSavedState(JSON.stringify(convertRaw));
+        toast.success('Your changes are being saved', {
+            style: {
+                background: 'green',
+                color: 'white',
+            },
+        });
     };
 
     return (
