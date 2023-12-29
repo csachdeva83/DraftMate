@@ -18,8 +18,8 @@ import './App.css';
 const App = () => {
     const [savedState, setSavedState] = useLocalStorage('content', '');
     const [editorState, setEditorState] = useState(() => {
-        const parsedString = JSON.parse(savedState);
-        if (parsedString) {
+        if (savedState.length > 0) {
+            const parsedString = JSON.parse(savedState);
             const contentState = convertFromRaw(parsedString);
             return EditorState.createWithContent(contentState);
         }
