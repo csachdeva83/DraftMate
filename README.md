@@ -31,7 +31,7 @@ A live demo of the application can be accessed [here](https://portle.csachdeva83
 
 ## Screenshot
 
-![Page](screenshot/home.png)
+![Page](screenshots/home.png)
 
 ## Hosting
 
