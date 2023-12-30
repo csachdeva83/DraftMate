@@ -1,30 +1,38 @@
-# React + TypeScript + Vite
+# ReactJS Editor with Draft.js
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Live Demo
 
-Currently, two official plugins are available:
+A live demo of the application can be accessed [here](https://portle.csachdeva83.in/).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Components
 
-## Expanding the ESLint configuration
+-   **Title:** Displays the title of the editor.
+-   **Button:** Allows users to save the content of the editor.
+-   **Editor:** Utilizes Draft.js for text input and formatting.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Formatting Options
 
-- Configure the top-level `parserOptions` property like this:
+-   **Headings:** Typing `#` as the first character in a line followed by a space sets the text on the same line as a heading.
+-   **Bold:** Typing `*` as the first character in a line followed by a space makes the subsequent text bold.
+-   **Red Line:** Using `**` followed by a space creates a red line format.
+-   **Underline:** Typing `***` followed by a space underlines the text.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+## Usage
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+-   **Typing**: Use the specified characters followed by a space to activate formatting.
+-   **Save Button**: Pressing the "Save" button stores the content into `localstorage`.
+-   **Persistence**: The saved content is retrieved from `localstorage` upon page refresh, refilling the editor.
+
+## How to Run
+
+1. Clone this repository.
+2. Install dependencies using `npm install`.
+3. Run the project using `npm run dev`.
+
+## Screenshot
+
+![Page](screenshot/home.png)
+
+## Hosting
+
+The application is hosted at Digital Ocean.
