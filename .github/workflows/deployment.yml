@@ -1,27 +1,32 @@
-name: Deployment
+name: Deploy React App to SSH Server
+
 on:
     push:
-        branches:
-            - master
+        branches: [master]
+
 jobs:
-    Deploy-to-VPS:
+    build-and-deploy:
         runs-on: ubuntu-latest
+
         steps:
-            - uses: actions/checkout@v2
-            - name: Use Node.js
-              uses: actions/setup-node@v1
+            - uses: actions/checkout@v3
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
               with:
-                  node-version: '20'
-            - run: npm i
-            - run: npm run build --if-present
-              env:
-                  CI: false
-            - name: Copy folder content recursively to vps
-              uses: garygrossgarten/github-action-scp@release
+                  node-version: 16
+
+            - name: Install dependencies
+              run: npm install
+
+            - name: Build React app
+              run: npm run build
+
+            - name: Deploy to SSH server
+              uses: fifsky/ssh-action@master
               with:
-                  local: dist
-                  remote: /var/www/portle-assignment
+                  command: |
+                      scp -r build/* ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/var/www/portle-assignment
                   host: ${{ secrets.HOST }}
                   username: ${{ secrets.USERNAME }}
                   password: ${{ secrets.PASSWORD }}
-            - run: echo "🍏 This job's status is ${{ job.status }}."
