@@ -16,7 +16,10 @@ import { useLocalStorage } from 'usehooks-ts';
 import './App.css';
 
 const App = () => {
-    const [savedState, setSavedState] = useLocalStorage('content', '');
+    const [savedState, setSavedState] = useLocalStorage(
+        'content',
+        '{"blocks":[{"key":"c3bvc","text":"Start a line with # followed by  a space for a heading.","type":"unstyled","depth":0,"inlineStyleRanges":[{"offset":0,"length":55,"style":"HEADING"}],"entityRanges":[],"data":{}},{"key":"19etl","text":"Start a line with * followed by a space to make subsequent text bold.","type":"unstyled","depth":0,"inlineStyleRanges":[{"offset":0,"length":69,"style":"BOLD"}],"entityRanges":[],"data":{}},{"key":"3lrb","text":"​Using ** followed by a space creates a red line format.","type":"unstyled","depth":0,"inlineStyleRanges":[{"offset":0,"length":56,"style":"RED"}],"entityRanges":[],"data":{}},{"key":"cei36","text":"​Typing *** followed by a space underlines the text.","type":"unstyled","depth":0,"inlineStyleRanges":[{"offset":0,"length":52,"style":"UNDERLINE"}],"entityRanges":[],"data":{}},{"key":"coi0b","text":"","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"8lk6v","text":"","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}',
+    );
     const [editorState, setEditorState] = useState(() => {
         if (savedState.length > 0) {
             const parsedString = JSON.parse(savedState);
